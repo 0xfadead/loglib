@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 
-#ifndef DEBUG_INFO_PREFIX
-#define DEBUG_INFO_PREFIX "[ii] "
+#ifndef VERBOSE_INFO_PREFIX
+#define VERBOSE_INFO_PREFIX "[ii] "
 #endif
 #ifndef INFO_PREFIX
 #define INFO_PREFIX "[i]  "
@@ -13,15 +13,15 @@
 #define IMPORTANT_INFO_PREFIX "[I]  "
 #endif
 
-#ifndef DEBUG_PROGRESS_PREFIX
-#define DEBUG_PROGRESS_PREFIX "[**] "
+#ifndef VERBOSE_PROGRESS_PREFIX
+#define VERBOSE_PROGRESS_PREFIX "[**] "
 #endif
 #ifndef PROGRESS_PREFIX
 #define PROGRESS_PREFIX "[*]  "
 #endif
 
-#ifndef DEBUG_WARNING_PREFIX
-#define DEBUG_WARNING_PREFIX "[ww] "
+#ifndef VERBOSE_WARNING_PREFIX
+#define VERBOSE_WARNING_PREFIX "[ww] "
 #endif
 #ifndef WARNING_PREFIX
 #define WARNING_PREFIX "[w]  "
@@ -30,8 +30,8 @@
 #define IMPORTANT_WARNING_PREFIX "[W]  "
 #endif
 
-#ifndef DEBUG_ERROR_PREFIX
-#define DEBUG_ERROR_PREFIX
+#ifndef VERBOSE_ERROR_PREFIX
+#define VERBOSE_ERROR_PREFIX
 #endif
 #ifndef ERROR_PREFIX
 #define ERROR_PREFIX "[e]  "
@@ -43,13 +43,16 @@
 #define FATAL_PREFIX "[F]  "
 #endif
 
+static int ll_verbose = 0;
+
 #ifdef SHOW_TIMESTAMP
 
 static char *llib_timestamp(void);
 
-#define log_dbg_info(FORMAT, ...)                                              \
-  printf(DEBUG_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(), \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_verbose_info(FORMAT, ...)                                          \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                 \
+         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_info(FORMAT, ...)                                                  \
   printf(INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),       \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
@@ -57,15 +60,17 @@ static char *llib_timestamp(void);
   printf(IMPORTANT_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",               \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_dbg_progress(FORMAT, ...)                                          \
-  printf(DEBUG_PRODEBUG_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",      \
+#define log_verbose_progress(FORMAT, ...)                                      \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_PRODEBUG_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",    \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
   printf(PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),   \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_dbg_warning(FORMAT, ...)                                           \
-  printf(DEBUG_WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                \
+#define log_verbose_warning(FORMAT, ...)                                       \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",              \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_warning(FORMAT, ...)                                               \
   printf(WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),    \
@@ -74,8 +79,9 @@ static char *llib_timestamp(void);
   printf(IMPORTANT_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",               \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_dbg_error(FORMAT, ...)                                             \
-  printf(DEBUG_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                  \
+#define log_verbose_error(FORMAT, ...)                                         \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_error(FORMAT, ...)                                                 \
   printf(ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),      \
@@ -87,8 +93,9 @@ static char *llib_timestamp(void);
   printf(FATAL_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),      \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #else
-#define log_dbg_info(FORMAT, ...)                                              \
-  printf(DEBUG_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,    \
+#define log_verbose_info(FORMAT, ...)                                          \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,  \
          __FUNCTION__, ##__VA_ARGS__)
 #define log_info(FORMAT, ...)                                                  \
   printf(INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,          \
@@ -97,16 +104,18 @@ static char *llib_timestamp(void);
   printf(IMPORTANT_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,          \
          __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_dbg_progress(FORMAT, ...)                                          \
-  printf(DEBUG_PRODEBUG_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, \
-         __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_verbose_progress(FORMAT, ...)                                      \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_PRODEBUG_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n",         \
+         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
   printf(PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,      \
          __FUNCTION__, ##__VA_ARGS__)
 
-#define log_dbg_warning(FORMAT, ...)                                           \
-  printf(DEBUG_WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__, \
-         __FUNCTION__, ##__VA_ARGS__)
+#define log_verbose_warning(FORMAT, ...)                                       \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,         \
+         __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_warning(FORMAT, ...)                                               \
   printf(WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,       \
          __FUNCTION__, ##__VA_ARGS__)
@@ -114,8 +123,9 @@ static char *llib_timestamp(void);
   printf(IMPORTANT_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,          \
          __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_dbg_error(FORMAT, ...)                                             \
-  printf(DEBUG_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,   \
+#define log_verbose_error(FORMAT, ...)                                         \
+  if (ll_verbose)                                                              \
+  printf(VERBOSE_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__, \
          __FUNCTION__, ##__VA_ARGS__)
 #define log_error(FORMAT, ...)                                                 \
   printf(ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,         \
