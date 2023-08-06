@@ -1,8 +1,10 @@
 # LogLib
-A basic and lightweight logging-library with a very creative name.
 
-## Examples
-```
+## About
+A basic, single-file and lightweight logging-library with a very creative name.
+
+### Examples
+```c
 #define SHOW_TIMESTAMP // enables functionality for displaying a timestamp
 #include "llib.h"
 #include <string.h>
@@ -31,7 +33,7 @@ int main(int ac, char **av) {
 }
 ```
 
-### Output with input `./a.out -v --test`
+#### Output with input `./a.out -v --test`
 ```
 [i]  [20:57:27.497] main.c:20::main(): Argument 0: `./a.out`
 [ii] [20:57:27.497] main.c:22::main(): 	Length: 7
