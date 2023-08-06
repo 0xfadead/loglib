@@ -3,44 +3,72 @@
 
 #include <stdio.h>
 
+#ifdef SHOW_COLOR
+#ifndef INFO_COLOR
+#define INFO_COLOR "\e[1;32m" // GREEN
+#endif
+#ifndef PROGRESS_COLOR
+#define PROGRESS_COLOR "\e[1;36m" // CYAN
+#endif
+#ifndef WARNING_COLOR
+#define WARNING_COLOR "\e[1;33m" // YELLOW
+#endif
+#ifndef ERROR_COLOR
+#define ERROR_COLOR "\e[1;31m" // RED
+#endif
+#ifndef FATAL_COLOR
+#define FATAL_COLOR "\e[1;35m" // PURPLE
+#endif
+
+#define ANSI_RESET "\e[0;0m"
+
+#else
+#define INFO_COLOR ""
+#define PROGRESS_COLOR ""
+#define WARNING_COLOR ""
+#define ERROR_COLOR ""
+#define FATAL_COLOR ""
+#define ANSI_RESET ""
+#endif
+
 #ifndef VERBOSE_INFO_PREFIX
-#define VERBOSE_INFO_PREFIX "[ii] "
+#define VERBOSE_INFO_PREFIX "[" INFO_COLOR "ii" ANSI_RESET "] "
 #endif
 #ifndef INFO_PREFIX
-#define INFO_PREFIX "[i]  "
+#define INFO_PREFIX "[" INFO_COLOR "i" ANSI_RESET "]  "
 #endif
 #ifndef IMPORTANT_INFO_PREFIX
-#define IMPORTANT_INFO_PREFIX "[I]  "
+#define IMPORTANT_INFO_PREFIX "[" INFO_COLOR "I]" ANSI_RESET "  "
 #endif
 
 #ifndef VERBOSE_PROGRESS_PREFIX
-#define VERBOSE_PROGRESS_PREFIX "[**] "
+#define VERBOSE_PROGRESS_PREFIX "[" PROGRESS_COLOR "**" ANSI_RESET "] "
 #endif
 #ifndef PROGRESS_PREFIX
-#define PROGRESS_PREFIX "[*]  "
+#define PROGRESS_PREFIX "[" PROGRESS_COLOR "*" ANSI_RESET "]  "
 #endif
 
 #ifndef VERBOSE_WARNING_PREFIX
-#define VERBOSE_WARNING_PREFIX "[ww] "
+#define VERBOSE_WARNING_PREFIX "[" WARNING_COLOR "ww" ANSI_RESET "] "
 #endif
 #ifndef WARNING_PREFIX
-#define WARNING_PREFIX "[w]  "
+#define WARNING_PREFIX "[" WARNING_COLOR "w" ANSI_RESET "]  "
 #endif
 #ifndef IMPORTANT_WARNING_PREFIX
-#define IMPORTANT_WARNING_PREFIX "[W]  "
+#define IMPORTANT_WARNING_PREFIX "[" WARNING_COLOR "W" ANSI_RESET "]  "
 #endif
 
 #ifndef VERBOSE_ERROR_PREFIX
-#define VERBOSE_ERROR_PREFIX
+#define VERBOSE_ERROR_PREFIX "[" ERROR_COLOR "ee" ANSI_RESET "] "
 #endif
 #ifndef ERROR_PREFIX
-#define ERROR_PREFIX "[e]  "
+#define ERROR_PREFIX "[" ERROR_COLOR "e" ANSI_RESET "]  "
 #endif
 #ifndef IMPORTANT_ERROR_PREFIX
-#define IMPORTANT_ERROR_PREFIX "[E]  "
+#define IMPORTANT_ERROR_PREFIX "[" ERROR_PREFIX "E" ANSI_RESET "]  "
 #endif
 #ifndef FATAL_PREFIX
-#define FATAL_PREFIX "[F]  "
+#define FATAL_PREFIX "[" FATAL_COLOR "F" ANSI_RESET "]  "
 #endif
 
 static int ll_verbose = 0;
