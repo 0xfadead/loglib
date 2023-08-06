@@ -5,6 +5,7 @@ A basic, single-file and lightweight logging-library with a very creative name.
 
 ### Examples
 ```c
+#define SHOW_COLOR // enables ansi codes for color
 #define SHOW_TIMESTAMP // enables functionality for displaying a timestamp
 #include "llib.h"
 #include <string.h>
