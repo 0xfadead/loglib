@@ -168,7 +168,24 @@ static char *llib_timestamp(void);
   printf(FATAL_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,         \
          __FUNCTION__, ##__VA_ARGS__)
 #endif // SHOW_TIMESTAMP
-#endif // LLIB_H
+
+#ifdef PROGRESS_BAR_IMPLEMENTATION
+
+typedef struct {
+  unsigned short length;
+  float progress;         // from 0.0 to 100.0
+  char *progress_style;   // This has to be NULL terminated
+  char start_char;        // character before the actual progress display
+  char progress_char;     // character to symbolise progress
+  char empty_char;        // character, which fills the empty space of progress
+  char end_char;          // character after the actual progress display
+  const char *start_text; // text before the progress display
+  const char *end_text;   // text after the progress display
+} llprogress_bar;
+
+void update_progress_bar(llprogress_bar p, char last);
+
+#endif // PROGRESS_BAR_IMPLEMENTATION
 
 #ifdef SHOW_TIMESTAMP
 #include <sys/time.h>
@@ -189,4 +206,56 @@ static char *llib_timestamp(void) {
 
   return time_out_str;
 }
+#endif // SHOW_TIMESTAMP
+
+#ifdef PROGRESS_BAR_IMPLEMENTATION
+#include <stdio.h>
+
+void update_progress_bar(llprogress_bar p, char last) {
+  if (p.progress > 100)
+    p.progress = 100.0;
+
+  char progress_chars[(p.length + 1 /* NULL TERMINATOR */) * sizeof(char)];
+
+  unsigned short progress_amount = (short)((p.progress * p.length) / 100);
+
+  if (progress_amount > p.length) {
+    log_important_error("Integer overflow of progress_amount!");
+    return;
+  }
+
+  if (p.progress_char == 0)
+    p.progress_char = '#';
+  if (p.empty_char == 0)
+    p.empty_char = ' ';
+
+  if (p.start_char == 0)
+    p.start_char = '[';
+  if (p.end_char == 0)
+    p.end_char = ']';
+
+#ifndef SHOW_COLOR
+  p.progress_style = NULL;
 #endif
+
+  for (unsigned short i = 0; i < progress_amount; i++) {
+    progress_chars[i] = p.progress_char;
+  }
+
+  for (unsigned short i = progress_amount; i < p.length; i++) {
+    progress_chars[i] = p.empty_char;
+  }
+
+  progress_chars[p.length] = '\0';
+
+  printf("\r%s %c%s%s" ANSI_RESET "%c %s", (!p.start_text ? "" : p.start_text),
+         p.start_char, (!p.progress_style ? "" : p.progress_style),
+         progress_chars, p.end_char, (!p.end_text ? "" : p.end_text));
+  fflush(stdout);
+
+  if (last)
+    puts("");
+}
+#endif // PROGRESS_BAR_IMPLEMENTATION
+
+#endif // LLIB_H
