@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+// Ansi escape sequences for logging with color
 #ifdef SHOW_COLOR
 #ifndef INFO_COLOR
 #define INFO_COLOR "\e[1;32m" // GREEN
@@ -20,7 +21,9 @@
 #define FATAL_COLOR "\e[1;35m" // PURPLE
 #endif
 
+#ifndef ANSI_RESET
 #define ANSI_RESET "\e[0;0m"
+#endif
 
 #else
 #define INFO_COLOR ""
@@ -90,7 +93,7 @@ static char *llib_timestamp(void);
 
 #define log_verbose_progress(FORMAT, ...)                                      \
   if (ll_verbose)                                                              \
-  printf(VERBOSE_PRODEBUG_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",    \
+  printf(VERBOSE_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",             \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
   printf(PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),   \
@@ -134,8 +137,8 @@ static char *llib_timestamp(void);
 
 #define log_verbose_progress(FORMAT, ...)                                      \
   if (ll_verbose)                                                              \
-  printf(VERBOSE_PRODEBUG_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n",         \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+  printf(VERBOSE_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,        \
+         __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
   printf(PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,      \
          __FUNCTION__, ##__VA_ARGS__)
@@ -166,8 +169,6 @@ static char *llib_timestamp(void);
          __FUNCTION__, ##__VA_ARGS__)
 #endif // SHOW_TIMESTAMP
 #endif // LLIB_H
-
-// #define SHOW_TIMESTAMP
 
 #ifdef SHOW_TIMESTAMP
 #include <sys/time.h>
