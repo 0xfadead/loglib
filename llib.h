@@ -219,7 +219,7 @@ void update_progress_bar(llprogress_bar p, char last) {
 
   char progress_chars[(p.length + 1 /* NULL TERMINATOR */) * sizeof(char)];
 
-  unsigned short progress_amount = (short)((progress * p.length) / 100);
+  unsigned short progress_amount = (short)((progress * p.length));
 
   if (progress_amount > p.length) {
     log_important_error("Integer overflow of progress_amount!");
