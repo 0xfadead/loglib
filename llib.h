@@ -173,8 +173,9 @@ static char *llib_timestamp(void);
 
 typedef struct {
   unsigned short length;
-  float progress;         // from 0.0 to 100.0
-  char *progress_style;   // This has to be NULL terminated
+  unsigned long current;  // current status
+  unsigned long max_size; // maximum status
+  char *progress_style;   // NOTE: has to be NULL terminated
   char start_char;        // character before the actual progress display
   char progress_char;     // character to symbolise progress
   char empty_char;        // character, which fills the empty space of progress
@@ -212,12 +213,13 @@ static char *llib_timestamp(void) {
 #include <stdio.h>
 
 void update_progress_bar(llprogress_bar p, char last) {
-  if (p.progress > 100)
-    p.progress = 100.0;
+  float progress = (float)p.current / p.max_size;
+  if (progress > 1.0)
+    progress = 1.0;
 
   char progress_chars[(p.length + 1 /* NULL TERMINATOR */) * sizeof(char)];
 
-  unsigned short progress_amount = (short)((p.progress * p.length) / 100);
+  unsigned short progress_amount = (short)((progress * p.length) / 100);
 
   if (progress_amount > p.length) {
     log_important_error("Integer overflow of progress_amount!");
