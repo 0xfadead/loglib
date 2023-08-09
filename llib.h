@@ -68,7 +68,7 @@
 #define ERROR_PREFIX "[" ERROR_COLOR "e" ANSI_RESET "]  "
 #endif
 #ifndef IMPORTANT_ERROR_PREFIX
-#define IMPORTANT_ERROR_PREFIX "[" ERROR_PREFIX "E" ANSI_RESET "]  "
+#define IMPORTANT_ERROR_PREFIX "[" ERROR_COLOR "E" ANSI_RESET "]  "
 #endif
 #ifndef FATAL_PREFIX
 #define FATAL_PREFIX "[" FATAL_COLOR "F" ANSI_RESET "]  "
@@ -175,9 +175,13 @@ typedef struct {
   unsigned short length;
   unsigned long current;  // current status
   unsigned long max_size; // maximum status
-  char *progress_style;   // NOTE: has to be NULL terminated
   char start_char;        // character before the actual progress display
+  char *progress_style;   // NOTE: has to be NULL terminated
   char progress_char;     // character to symbolise progress
+  char *trans_style;
+  char trans_char; // character between the progress_char and empty_char (will
+                   // be the same as the progress_char if set to zero)
+  char *empty_style;
   char empty_char;        // character, which fills the empty space of progress
   char end_char;          // character after the actual progress display
   const char *start_text; // text before the progress display
@@ -217,17 +221,10 @@ void update_progress_bar(llprogress_bar p, char last) {
   if (progress > 1.0)
     progress = 1.0;
 
-  char progress_chars[(p.length + 1 /* NULL TERMINATOR */) * sizeof(char)];
-
-  unsigned short progress_amount = (short)((progress * p.length));
-
-  if (progress_amount > p.length) {
-    log_important_error("Integer overflow of progress_amount!");
-    return;
-  }
-
   if (p.progress_char == 0)
     p.progress_char = '#';
+  if (p.trans_char == 0)
+    p.trans_char = p.progress_char;
   if (p.empty_char == 0)
     p.empty_char = ' ';
 
@@ -238,21 +235,45 @@ void update_progress_bar(llprogress_bar p, char last) {
 
 #ifndef SHOW_COLOR
   p.progress_style = NULL;
+  p.trans_style = NULL;
+  p.progress_style = NULL;
 #endif
+
+  unsigned short progress_amount = (unsigned short)((p.length * progress));
+  unsigned short empty_amount =
+      (unsigned short)(p.length - (p.length * progress));
+
+  if (!progress_amount && empty_amount)
+    empty_amount--;
+  if (progress_amount)
+    progress_amount--;
+
+  if (progress_amount + empty_amount + 1 < p.length) {
+    empty_amount += p.length - progress_amount - 1 - empty_amount;
+  }
+
+  char progress_chars[(progress_amount + 1) * sizeof(char)];
+
+  char empty_chars[(empty_amount + 1) * sizeof(char)];
 
   for (unsigned short i = 0; i < progress_amount; i++) {
     progress_chars[i] = p.progress_char;
   }
 
-  for (unsigned short i = progress_amount; i < p.length; i++) {
-    progress_chars[i] = p.empty_char;
+  progress_chars[progress_amount] = '\0';
+  empty_chars[empty_amount] = '\0';
+
+  for (unsigned short i = 0; i < empty_amount; i++) {
+    empty_chars[i] = p.empty_char;
   }
-
-  progress_chars[p.length] = '\0';
-
-  printf("\r%s %c%s%s" ANSI_RESET "%c %s", (!p.start_text ? "" : p.start_text),
-         p.start_char, (!p.progress_style ? "" : p.progress_style),
-         progress_chars, p.end_char, (!p.end_text ? "" : p.end_text));
+#if 1
+  printf("\r%s %c%s%s%s%c%s%s" ANSI_RESET "%c %s",
+         (!p.start_text ? "" : p.start_text), p.start_char,
+         (!p.progress_style ? "" : p.progress_style), progress_chars,
+         (!p.trans_style ? "" : p.trans_style), p.trans_char,
+         (!p.empty_style ? "" : p.empty_style), empty_chars, p.end_char,
+         (!p.end_text ? "" : p.end_text));
+#endif
   fflush(stdout);
 
   if (last)
