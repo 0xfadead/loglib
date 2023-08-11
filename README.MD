@@ -71,8 +71,8 @@ void _sleep(unsigned long ms) {
 int main(void) {
   llprogress_bar pbar = (llprogress_bar){
       .current = 0,    // current step
-      .max_size = 100, // the maximum step
-      .length = 100,   // length of progress bar in chars
+      .max_size = 50, // the maximum step
+      .length = 50,   // length of progress bar in chars
 
       .progress_style = "\e[1;32m",
       .progress_char = 0, // will default to '-'
@@ -92,7 +92,7 @@ int main(void) {
     update_progress_bar(
         &pbar, 0);     // the second argument just tells it to print a newline
     _sleep(50);        // sleep for 50 ms
-    pbar.current += 2; // update the current step
+    pbar.current++;    // update the current step
   }
 
   update_progress_bar(&pbar, 1); // last step to print the newline
@@ -103,5 +103,5 @@ int main(void) {
 ```
 $ gcc example2.c -o example2
 $ ./example2
-Test text [--------------------------------------------------------------------------------------------------->] Test text (new and improved)
+Test text [------------------------------------------------>] Test text (new and improved)
 ```
