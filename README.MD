@@ -11,6 +11,7 @@ A basic, single-file and lightweight logging-library with a very creative name.
 #include <string.h>
 
 int main(int ac, char **av) {
+  ll_verbosity = LL_LOG_NORMAL;
   // check for arguments
   if (ac < 2) {
     log_warning("No arguments specified.");
@@ -19,15 +20,15 @@ int main(int ac, char **av) {
   // check for "verbose" option
   for (int i = 0; i < ac; i++) {
     if (!strcmp(av[i], "-v") || !strcmp(av[i], "--verbose")) {
-      ll_verbose = 1;
+      ll_verbosity = LL_LOG_ALL;
     }
   }
 
   // print every argument
   for (int i = 0; i < ac; i++) {
     log_info("Argument %i: `%s`", i, av[i]);
-    // log_verbose_info() only prints when ll_verbose is set to one
-    log_verbose_info("\tLength: %lu", strlen(av[i]));
+    // log_soft_info() only prints when ll_verbose is set to one
+    log_soft_info("\tLength: %lu", strlen(av[i]));
   }
 
   return 0;
