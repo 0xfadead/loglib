@@ -34,136 +34,150 @@
 #define ANSI_RESET ""
 #endif
 
-#ifndef VERBOSE_INFO_PREFIX
-#define VERBOSE_INFO_PREFIX "[" INFO_COLOR "ii" ANSI_RESET "] "
+#ifndef SOFT_INFO_PREFIX
+#define SOFT_INFO_PREFIX "[" INFO_COLOR "ii" ANSI_RESET "] "
 #endif
 #ifndef INFO_PREFIX
 #define INFO_PREFIX "[" INFO_COLOR "i" ANSI_RESET "]  "
 #endif
-#ifndef IMPORTANT_INFO_PREFIX
-#define IMPORTANT_INFO_PREFIX "[" INFO_COLOR "I]" ANSI_RESET "  "
+#ifndef HARD_INFO_PREFIX
+#define HARD_INFO_PREFIX "[" INFO_COLOR "I]" ANSI_RESET "  "
 #endif
 
-#ifndef VERBOSE_PROGRESS_PREFIX
-#define VERBOSE_PROGRESS_PREFIX "[" PROGRESS_COLOR "**" ANSI_RESET "] "
+#ifndef SOFT_PROGRESS_PREFIX
+#define SOFT_PROGRESS_PREFIX "[" PROGRESS_COLOR "**" ANSI_RESET "] "
 #endif
 #ifndef PROGRESS_PREFIX
 #define PROGRESS_PREFIX "[" PROGRESS_COLOR "*" ANSI_RESET "]  "
 #endif
 
-#ifndef VERBOSE_WARNING_PREFIX
-#define VERBOSE_WARNING_PREFIX "[" WARNING_COLOR "ww" ANSI_RESET "] "
+#ifndef SOFT_WARNING_PREFIX
+#define SOFT_WARNING_PREFIX "[" WARNING_COLOR "ww" ANSI_RESET "] "
 #endif
 #ifndef WARNING_PREFIX
 #define WARNING_PREFIX "[" WARNING_COLOR "w" ANSI_RESET "]  "
 #endif
-#ifndef IMPORTANT_WARNING_PREFIX
-#define IMPORTANT_WARNING_PREFIX "[" WARNING_COLOR "W" ANSI_RESET "]  "
+#ifndef HARD_WARNING_PREFIX
+#define HARD_WARNING_PREFIX "[" WARNING_COLOR "W" ANSI_RESET "]  "
 #endif
 
-#ifndef VERBOSE_ERROR_PREFIX
-#define VERBOSE_ERROR_PREFIX "[" ERROR_COLOR "ee" ANSI_RESET "] "
+#ifndef SOFT_ERROR_PREFIX
+#define SOFT_ERROR_PREFIX "[" ERROR_COLOR "ee" ANSI_RESET "] "
 #endif
 #ifndef ERROR_PREFIX
 #define ERROR_PREFIX "[" ERROR_COLOR "e" ANSI_RESET "]  "
 #endif
-#ifndef IMPORTANT_ERROR_PREFIX
-#define IMPORTANT_ERROR_PREFIX "[" ERROR_COLOR "E" ANSI_RESET "]  "
+#ifndef HARD_ERROR_PREFIX
+#define HARD_ERROR_PREFIX "[" ERROR_COLOR "E" ANSI_RESET "]  "
 #endif
 #ifndef FATAL_PREFIX
 #define FATAL_PREFIX "[" FATAL_COLOR "F" ANSI_RESET "]  "
 #endif
 
-static int ll_verbose = 0;
+enum {
+  LL_LOG_HARD = 0,
+  LL_LOG_NORMAL = 1,
+  LL_LOG_ALL = 2,
+};
+
+static int ll_verbosity = LL_LOG_NORMAL;
 
 #ifdef SHOW_TIMESTAMP
 
 static char *llib_timestamp(void);
 
-#define log_verbose_info(FORMAT, ...)                                          \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                 \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_soft_info(FORMAT, ...)                                             \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),  \
+         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_info(FORMAT, ...)                                                  \
+  if (ll_verbosity)                                                            \
   printf(INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),       \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
-#define log_important_info(FORMAT, ...)                                        \
-  printf(IMPORTANT_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",               \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_hard_info(FORMAT, ...)                                             \
+  printf(HARD_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),  \
+         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_verbose_progress(FORMAT, ...)                                      \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",             \
+#define log_soft_progress(FORMAT, ...)                                         \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
+  if (ll_verbosity)                                                            \
   printf(PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),   \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_verbose_warning(FORMAT, ...)                                       \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",              \
+#define log_soft_warning(FORMAT, ...)                                          \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                 \
          llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_warning(FORMAT, ...)                                               \
+  if (ll_verbosity)                                                            \
   printf(WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),    \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
-#define log_important_warning(FORMAT, ...)                                     \
-  printf(IMPORTANT_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",               \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_hard_warning(FORMAT, ...)                                          \
+  printf(HARD_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),  \
+         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define log_verbose_error(FORMAT, ...)                                         \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_soft_error(FORMAT, ...)                                            \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(), \
+         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_error(FORMAT, ...)                                                 \
+  if (ll_verbosity)                                                            \
   printf(ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),      \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
-#define log_important_error(FORMAT, ...)                                       \
-  printf(IMPORTANT_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",              \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_hard_error(FORMAT, ...)                                            \
+  printf(HARD_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(), \
+         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #define log_fatal(FORMAT, ...)                                                 \
   printf(FATAL_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),      \
          __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #else
-#define log_verbose_info(FORMAT, ...)                                          \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,  \
+#define log_soft_info(FORMAT, ...)                                             \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,     \
          __FUNCTION__, ##__VA_ARGS__)
 #define log_info(FORMAT, ...)                                                  \
+  if (ll_verbosity)                                                            \
   printf(INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,          \
          __FUNCTION__, ##__VA_ARGS__)
-#define log_important_info(FORMAT, ...)                                        \
-  printf(IMPORTANT_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,          \
-         __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_hard_info(FORMAT, ...)                                             \
+  printf(HARD_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,     \
+         __FUNCTION__, ##__VA_ARGS__)
 
-#define log_verbose_progress(FORMAT, ...)                                      \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,        \
-         __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_soft_progress(FORMAT, ...)                                         \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__, \
+         __FUNCTION__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
+  if (ll_verbosity)                                                            \
   printf(PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,      \
          __FUNCTION__, ##__VA_ARGS__)
 
-#define log_verbose_warning(FORMAT, ...)                                       \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,         \
-         __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_soft_warning(FORMAT, ...)                                          \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,  \
+         __FUNCTION__, ##__VA_ARGS__)
 #define log_warning(FORMAT, ...)                                               \
+  if (ll_verbosity)                                                            \
   printf(WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,       \
          __FUNCTION__, ##__VA_ARGS__)
-#define log_important_warning(FORMAT, ...)                                     \
-  printf(IMPORTANT_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,          \
-         __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_hard_warning(FORMAT, ...)                                          \
+  printf(HARD_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,     \
+         __FUNCTION__, ##__VA_ARGS__)
 
-#define log_verbose_error(FORMAT, ...)                                         \
-  if (ll_verbose)                                                              \
-  printf(VERBOSE_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__, \
+#define log_soft_error(FORMAT, ...)                                            \
+  if (ll_verbosity > 1)                                                        \
+  printf(SOFT_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,    \
          __FUNCTION__, ##__VA_ARGS__)
 #define log_error(FORMAT, ...)                                                 \
+  if (ll_verbosity)                                                            \
   printf(ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,         \
          __FUNCTION__, ##__VA_ARGS__)
-#define log_important_error(FORMAT, ...)                                       \
-  printf(IMPORTANT_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__,         \
-         __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define log_hard_error(FORMAT, ...)                                            \
+  printf(HARD_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,    \
+         __FUNCTION__, ##__VA_ARGS__)
 #define log_fatal(FORMAT, ...)                                                 \
   printf(FATAL_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,         \
          __FUNCTION__, ##__VA_ARGS__)
@@ -176,16 +190,18 @@ typedef struct {
   unsigned long current;  // current status
   unsigned long max_size; // maximum status
   char start_char;        // character before the actual progress display
-  char *progress_style;   // NOTE: has to be NULL terminated
+  char *progress_style;   // string for ANSI sequence to change color and/or
+                          // formatting of the progress-chars
   char progress_char;     // character to symbolise progress
-  char *trans_style;
-  char trans_char; // character between the progress_char and empty_char (will
-                   // be the same as the progress_char if set to zero)
-  char *empty_style;
-  char empty_char;        // character, which fills the empty space of progress
-  char end_char;          // character after the actual progress display
+  char *trans_style;      // same as progress_style
+  char trans_char;   // character between the progress_char and empty_char (will
+                     // be the same as the progress_char if set to zero)
+  char *empty_style; // same as progress style
+  char empty_char;   // character, which fills the empty space of progress
+  char end_char;     // character after the actual progress display
   const char *start_text; // text before the progress display
   const char *end_text;   // text after the progress display
+  char min_verbosity_level;
 } llprogress_bar;
 
 void update_progress_bar(llprogress_bar p, char last);
@@ -266,15 +282,16 @@ void update_progress_bar(llprogress_bar p, char last) {
   for (unsigned short i = 0; i < empty_amount; i++) {
     empty_chars[i] = p.empty_char;
   }
-#if 1
-  printf("\r%s %c%s%s%s%c%s%s" ANSI_RESET "%c %s",
-         (!p.start_text ? "" : p.start_text), p.start_char,
-         (!p.progress_style ? "" : p.progress_style), progress_chars,
-         (!p.trans_style ? "" : p.trans_style), p.trans_char,
-         (!p.empty_style ? "" : p.empty_style), empty_chars, p.end_char,
-         (!p.end_text ? "" : p.end_text));
-#endif
-  fflush(stdout);
+
+  if (ll_verbosity >= p.min_verbosity_level) {
+    printf("\r%s %c%s%s%s%c%s%s" ANSI_RESET "%c %s",
+           (!p.start_text ? "" : p.start_text), p.start_char,
+           (!p.progress_style ? "" : p.progress_style), progress_chars,
+           (!p.trans_style ? "" : p.trans_style), p.trans_char,
+           (!p.empty_style ? "" : p.empty_style), empty_chars, p.end_char,
+           (!p.end_text ? "" : p.end_text));
+    fflush(stdout);
+  }
 
   if (last)
     puts("");
