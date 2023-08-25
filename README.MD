@@ -40,12 +40,12 @@ int main(int ac, char **av) {
 ```
 $ gcc example1.c -o example1 -Wall -Wextra -Werror
 $ ./example1 -v --test
-[i]  [20:57:27.497] main.c:20::main(): Argument 0: `./a.out`
-[ii] [20:57:27.497] main.c:22::main(): 	Length: 7
-[i]  [20:57:27.497] main.c:20::main(): Argument 1: `-v`
-[ii] [20:57:27.497] main.c:22::main(): 	Length: 2
-[i]  [20:57:27.497] main.c:20::main(): Argument 2: `--test`
-[ii] [20:57:27.497] main.c:22::main(): 	Length: 6
+[i]  [20:57:27.497] example1.c:20::main(): Argument 0: `./a.out`
+[ii] [20:57:27.497] example1.c:22::main(): 	Length: 7
+[i]  [20:57:27.497] example1.c:20::main(): Argument 1: `-v`
+[ii] [20:57:27.497] example1.c:22::main(): 	Length: 2
+[i]  [20:57:27.497] example1.c:20::main(): Argument 2: `--test`
+[ii] [20:57:27.497] example1.c:22::main(): 	Length: 6
 ```
 
 #### Progress bar
