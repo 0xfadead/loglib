@@ -103,5 +103,5 @@ int main(void) {
 ```
 $ gcc example2.c -o example2
 $ ./example2
-Test text [------------------------------------------------>] Test text (new and improved)
+Test text [------------------------------------------------>] Test text (new and improved BUY NOW for only $39.99)
 ```
