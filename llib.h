@@ -41,7 +41,7 @@
 #define INFO_PREFIX "[" INFO_COLOR "i" ANSI_RESET "]  "
 #endif
 #ifndef HARD_INFO_PREFIX
-#define HARD_INFO_PREFIX "[" INFO_COLOR "I]" ANSI_RESET "  "
+#define HARD_INFO_PREFIX "[" INFO_COLOR "I" ANSI_RESET "]  "
 #endif
 
 #ifndef SOFT_PROGRESS_PREFIX
