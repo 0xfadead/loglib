@@ -6,23 +6,23 @@
 // Ansi escape sequences for logging with color
 #ifdef SHOW_COLOR
 #ifndef INFO_COLOR
-#define INFO_COLOR "\e[1;32m" // GREEN
+#define INFO_COLOR "\033[1;32m" // GREEN
 #endif
 #ifndef PROGRESS_COLOR
-#define PROGRESS_COLOR "\e[1;36m" // CYAN
+#define PROGRESS_COLOR "\033[1;36m" // CYAN
 #endif
 #ifndef WARNING_COLOR
-#define WARNING_COLOR "\e[1;33m" // YELLOW
+#define WARNING_COLOR "\033[1;33m" // YELLOW
 #endif
 #ifndef ERROR_COLOR
-#define ERROR_COLOR "\e[1;31m" // RED
+#define ERROR_COLOR "\033[1;31m" // RED
 #endif
 #ifndef FATAL_COLOR
-#define FATAL_COLOR "\e[1;35m" // PURPLE
+#define FATAL_COLOR "\033[1;35m" // PURPLE
 #endif
 
 #ifndef ANSI_RESET
-#define ANSI_RESET "\e[0;0m"
+#define ANSI_RESET "\033[0;0m"
 #endif
 
 #else
@@ -89,98 +89,98 @@ static char *llib_timestamp(void);
 #define log_soft_info(FORMAT, ...)                                             \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),  \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_info(FORMAT, ...)                                                  \
   if (ll_verbosity)                                                            \
   printf(INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),       \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_hard_info(FORMAT, ...)                                             \
   printf(HARD_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),  \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
 #define log_soft_progress(FORMAT, ...)                                         \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         llib_timestamp(), __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
   if (ll_verbosity)                                                            \
   printf(PROGRESS_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),   \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
 #define log_soft_warning(FORMAT, ...)                                          \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n",                 \
-         llib_timestamp(), __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         llib_timestamp(), __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_warning(FORMAT, ...)                                               \
   if (ll_verbosity)                                                            \
   printf(WARNING_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),    \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_hard_warning(FORMAT, ...)                                          \
   printf(HARD_INFO_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),  \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
 #define log_soft_error(FORMAT, ...)                                            \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(), \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_error(FORMAT, ...)                                                 \
   if (ll_verbosity)                                                            \
   printf(ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),      \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_hard_error(FORMAT, ...)                                            \
   printf(HARD_ERROR_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(), \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #define log_fatal(FORMAT, ...)                                                 \
   printf(FATAL_PREFIX "[%s] %s:%i::%s(): " FORMAT "\n", llib_timestamp(),      \
-         __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+         __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 #else
 #define log_soft_info(FORMAT, ...)                                             \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,     \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_info(FORMAT, ...)                                                  \
   if (ll_verbosity)                                                            \
   printf(INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,          \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_hard_info(FORMAT, ...)                                             \
   printf(HARD_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,     \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 
 #define log_soft_progress(FORMAT, ...)                                         \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__, \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_progress(FORMAT, ...)                                              \
   if (ll_verbosity)                                                            \
   printf(PROGRESS_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,      \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 
 #define log_soft_warning(FORMAT, ...)                                          \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,  \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_warning(FORMAT, ...)                                               \
   if (ll_verbosity)                                                            \
   printf(WARNING_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,       \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_hard_warning(FORMAT, ...)                                          \
   printf(HARD_INFO_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,     \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 
 #define log_soft_error(FORMAT, ...)                                            \
   if (ll_verbosity > 1)                                                        \
   printf(SOFT_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,    \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_error(FORMAT, ...)                                                 \
   if (ll_verbosity)                                                            \
   printf(ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,         \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_hard_error(FORMAT, ...)                                            \
   printf(HARD_ERROR_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,    \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #define log_fatal(FORMAT, ...)                                                 \
   printf(FATAL_PREFIX "%s:%i::%s(): " FORMAT "\n", __FILE__, __LINE__,         \
-         __FUNCTION__, ##__VA_ARGS__)
+         __func__, ##__VA_ARGS__)
 #endif // SHOW_TIMESTAMP
 
 #ifdef PROGRESS_BAR_IMPLEMENTATION
